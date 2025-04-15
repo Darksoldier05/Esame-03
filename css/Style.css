@@ -1,0 +1,622 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Inter", sans-serif;
+  background: #1c1c1c;
+  color: #f5f5f5;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+@media (min-width: 769px) {
+  html,
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  border-bottom: 2px solid rgba(255, 193, 7, 0.3);
+}
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffc107;
+  text-decoration: none;
+}
+.navbar ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+.navbar ul li a {
+  color: #f5f5f5;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+.navbar ul li a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #ffc107;
+  bottom: -5px;
+  left: 0;
+  transition: width 0.3s;
+}
+.navbar ul li a:hover::after, .navbar ul li a.active::after {
+  width: 100%;
+}
+.navbar .menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ffc107;
+}
+@media (max-width: 768px) {
+  .navbar ul {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background: #222;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    padding: 1rem 0;
+    border-left: 2px solid rgba(255, 193, 7, 0.3);
+    border-bottom: 2px solid rgba(255, 193, 7, 0.3);
+  }
+  .navbar ul.show {
+    display: flex;
+  }
+  .navbar ul li {
+    margin: 0.7rem 0;
+  }
+  .navbar ul li a {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f5f5f5;
+    text-align: center;
+    text-decoration: none;
+  }
+  .navbar ul li a:hover {
+    color: #ffc107;
+  }
+  .navbar .menu-toggle {
+    display: block;
+    font-size: 2rem;
+    color: #ffc107;
+    cursor: pointer;
+    margin-right: 3.2rem;
+    margin-top: 0.2rem;
+  }
+  .navbar .card-progetto {
+    flex: 0 1 150%;
+  }
+}
+
+header {
+  background: linear-gradient(145deg, #2d2d2d, #1b1b1b);
+  text-align: center;
+  padding: 0.3rem 0 0.5rem;
+}
+header h1 {
+  font-size: 2.5rem;
+  color: #ffc107;
+}
+header p {
+  font-size: 1.2rem;
+  color: #ddd;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: url("https://www.transparenttextures.com/patterns/wood-pattern.png") repeat;
+  background-color: #302520;
+  border-bottom: 4px solid #5a3e36;
+}
+.hero h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  color: #f5f5f5;
+}
+
+.progetti {
+  background: #1a1a1a;
+  padding: 4rem 1rem 2.5rem;
+  text-align: center;
+}
+.progetti h2 {
+  font-size: 2rem;
+  color: #ffc107;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 6px rgba(255, 193, 7, 0.3);
+}
+.progetti .grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+.progetti .card {
+  background: #222;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 300px;
+  flex: 1 1 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.progetti .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
+}
+.progetti .card h3 {
+  color: #ffc107;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+.progetti .card p {
+  color: #f5f5f5;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .progetti .grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .progetti .card {
+    width: 100%;
+    max-width: 90%;
+  }
+}
+
+.progetti-pubblici {
+  padding: 2rem 1rem 0.1rem;
+}
+.progetti-pubblici h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #ffc107;
+}
+.progetti-pubblici .griglia-progetti {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+.progetti-pubblici .card-progetto {
+  flex: 0 1 calc(30% - 2rem);
+  max-width: 100%;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.progetti-pubblici .card-progetto:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.4);
+}
+.progetti-pubblici .card-progetto h3 {
+  color: #ffc107;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+.progetti-pubblici .card-progetto p {
+  color: #f5f5f5;
+  font-size: 1rem;
+}
+.progetti-pubblici .card-progetto a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+.progetti-pubblici .card-progetto a:hover h3 {
+  text-decoration: underline;
+}
+
+.progetto-singolo {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+.progetto-singolo h1 {
+  color: #ffc107;
+  margin-bottom: 1rem;
+}
+.progetto-singolo img.img-progetto {
+  max-width: 100%;
+  height: auto;
+  max-height: 400px;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+.progetto-singolo p {
+  color: #f5f5f5;
+  line-height: 1.7;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.progetto-singolo .back-link {
+  display: inline-block;
+  margin-top: 2rem;
+  font-weight: bold;
+  color: #ffc107;
+  text-decoration: none;
+}
+.progetto-singolo .back-link:hover {
+  text-decoration: underline;
+}
+
+.chi-sono {
+  background: #1a1a1a;
+}
+.chi-sono .container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+.chi-sono .blocco-testo {
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #ccc;
+}
+.chi-sono .blocco-testo p {
+  margin-bottom: 1.5rem;
+}
+.chi-sono .blocco-testo p strong {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.contatti {
+  background: #1a1a1a;
+  padding: 2rem 1.5rem;
+}
+.contatti .container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.contatti form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.contatti form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+.contatti form input,
+.contatti form textarea {
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  color: #f5f5f5;
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.contatti form input::-moz-placeholder, .contatti form textarea::-moz-placeholder {
+  color: #999;
+}
+.contatti form input::placeholder,
+.contatti form textarea::placeholder {
+  color: #999;
+}
+.contatti form input:focus,
+.contatti form textarea:focus {
+  border-color: #ffc107;
+}
+.contatti form textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+.contatti form button {
+  background: #ffc107;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+.contatti form button:hover {
+  background: #d39e00;
+}
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 2rem 1rem;
+  background: #1a1a1a;
+}
+.login-page .container {
+  width: 100%;
+  max-width: 400px;
+}
+.login-page form {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+  width: 100%;
+}
+.login-page form h2 {
+  text-align: center;
+  color: #ffc107;
+  margin-bottom: 1.5rem;
+}
+.login-page form .form-group {
+  margin-bottom: 1rem;
+}
+.login-page form .form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 8px;
+  color: #f5f5f5;
+}
+.login-page form .form-group input::-moz-placeholder {
+  color: #999;
+}
+.login-page form .form-group input::placeholder {
+  color: #999;
+}
+.login-page form .form-group input:focus {
+  outline: none;
+  border-color: #ffc107;
+}
+.login-page form button {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: #ffc107;
+  color: #000;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.login-page form button:hover {
+  background: #d39e00;
+}
+.login-page form p {
+  margin-top: 1rem;
+  text-align: center;
+  color: #999;
+}
+
+.password-toggle {
+  position: relative;
+}
+.password-toggle input {
+  padding-right: 2.5rem;
+}
+.password-toggle .toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 0.8rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ffc107;
+  font-size: 1.1rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.password-toggle .toggle-password:hover {
+  opacity: 0.8;
+}
+
+.area-riservata {
+  padding: 2rem 1rem;
+}
+.area-riservata h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+.area-riservata h2 {
+  margin-top: 2rem;
+  color: #ffc107;
+  font-size: 1.4rem;
+}
+.area-riservata .logout-btn {
+  display: inline-block;
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background: #ffc107;
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
+}
+.area-riservata .logout-btn:hover {
+  background: #d39e00;
+}
+.area-riservata .card {
+  background: #1a1a1a;
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.1);
+  position: relative;
+  padding-right: 3rem;
+}
+.area-riservata .card h3 {
+  margin-bottom: 0.5rem;
+  color: #ffc107;
+}
+.area-riservata .card p {
+  margin: 0.3rem 0;
+  color: #f5f5f5;
+}
+.area-riservata .card small {
+  color: #777;
+}
+.area-riservata .card form {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  margin: 0;
+}
+.area-riservata .card form button {
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1rem;
+  text-align: center;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.area-riservata .card form button:hover {
+  background: darkred;
+}
+.area-riservata form {
+  margin-top: 1rem;
+}
+.area-riservata form .form-group {
+  margin-bottom: 1rem;
+}
+.area-riservata form .form-group input,
+.area-riservata form .form-group select {
+  width: 100%;
+  padding: 0.7rem;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 6px;
+  color: #f5f5f5;
+}
+.area-riservata form button {
+  background: #ffc107;
+  color: #000;
+  font-weight: bold;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.area-riservata form button:hover {
+  background: #d39e00;
+}
+
+.pagina-legale {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  line-height: 1.7;
+  color: #ccc;
+}
+.pagina-legale h2 {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  color: #ffc107;
+}
+.pagina-legale p,
+.pagina-legale li {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+.pagina-legale ul {
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+.pagina-legale a {
+  color: #ffc107;
+  text-decoration: underline;
+}
+.pagina-legale a:hover {
+  color: #ffce3a;
+}
+
+footer {
+  background: #111;
+  padding: 0.3rem 0 0.3rem;
+  margin-top: auto;
+  border-top: 2px solid #333;
+  text-align: center;
+}
+footer .footer-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+footer .footer-flex p {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+}
+footer .footer-flex .footer-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+footer .footer-flex .footer-links li a {
+  color: #888;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+footer .footer-flex .footer-links li a:hover {
+  color: #ffc107;
+}/*# sourceMappingURL=Style.css.map */
