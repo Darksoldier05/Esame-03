@@ -590,6 +590,7 @@ header {
             color: #777;
         }
 
+        // STILE DEL TASTO ELIMINA
         form {
             position: absolute;
             top: 1rem;
@@ -618,7 +619,93 @@ header {
                 }
             }
         }
+
+        // 🔧 STILE PER FORM DI MODIFICA
+        form[id^="edit-"] {
+            display: block;
+            margin: 1.5rem auto 1rem;
+            background: #121212;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba($primary, 0.2);
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 480px) {
+            form[id^="edit-"] {
+                padding: 1rem 0.8rem;
+                max-width: 95%;
+            }
+        }
+
+
+        form[id^="edit-"] .form-group {
+            margin-bottom: 1rem;
+
+            input,
+            textarea {
+                width: 100%;
+                background: #2a2a2a;
+                border: 1px solid rgba($primary, 0.4);
+                color: $light;
+                border-radius: 6px;
+                padding: 0.6rem 1rem;
+                font-size: 1rem;
+            }
+
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            label {
+                color: $light;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 0.4rem;
+            }
+        }
+
+        form[id^="edit-"] .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+
+            button {
+                min-width: 120px;
+                background: $primary;
+                color: #000;
+                font-weight: 600;
+                font-size: 1rem;
+                padding: 0.7rem 1.5rem;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: darken($primary, 10%);
+                    transform: scale(1.03);
+                }
+
+                &.annulla {
+                    background: #ff4444;
+                    color: #fff;
+
+                    &:hover {
+                        background: darkred;
+                    }
+                }
+            }
+        }
+
     }
+
 
     form {
         margin-top: 1rem;
@@ -651,6 +738,33 @@ header {
             }
         }
     }
+
+    // Bottone modifica ✎ accanto al bottone elimina
+    button[title="Modifica progetto"] {
+        position: absolute;
+        top: 1rem;
+        right: 3.2rem;
+        background: #ffa500; // arancione
+        color: #000;
+        border: none;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        line-height: 1rem;
+        text-align: center;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: darken(#ffa500, 10%);
+        }
+    }
+
 }
 
 
