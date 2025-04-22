@@ -15,6 +15,35 @@ $stmt = $pdo->prepare("SELECT * FROM utenti WHERE username = ?");
 $stmt->execute([$username]);
 $utente = $stmt->fetch();
 
+// Gestione modifica progetto (admin)
+if (isset($_POST['modifica_progetto']) && $utente['ruolo'] === 'admin') {
+  $id = (int) $_POST['edit_id'];
+  $titolo = trim($_POST['edit_titolo']);
+  $descrizione = trim($_POST['edit_descrizione']);
+  $descrizione_lista = trim($_POST['edit_descrizione_lista']);
+  $data_realizzazione = $_POST['edit_data_realizzazione'] ?: null;
+  $nome_cliente = trim($_POST['edit_nome_cliente']);
+  $tecnologie = trim($_POST['edit_tecnologie']);
+
+  $query = "UPDATE progetti SET titolo = ?, descrizione = ?, descrizione_lista = ?, data_realizzazione = ?, nome_cliente = ?, tecnologie = ?";
+  $params = [$titolo, $descrizione, $descrizione_lista, $data_realizzazione, $nome_cliente, $tecnologie];
+
+  if (!empty($_FILES['edit_immagine']['name'])) {
+    $fileName = basename($_FILES['edit_immagine']['name']);
+    $uploadPath = 'img/' . $fileName;
+    move_uploaded_file($_FILES['edit_immagine']['tmp_name'], $uploadPath);
+    $query .= ", immagine = ?";
+    $params[] = $uploadPath;
+  }
+
+  $query .= " WHERE id = ?";
+  $params[] = $id;
+
+  $update = $pdo->prepare($query);
+  $update->execute($params);
+}
+
+
 // Se l'admin ha richiesto l'eliminazione di un progetto
 if (isset($_POST['delete_project']) && $utente['ruolo'] === 'admin') {
   $del = $pdo->prepare("DELETE FROM progetti WHERE id = ?");
@@ -78,7 +107,8 @@ if (isset($_POST['new_username']) && $utente['ruolo'] === 'admin') {
 }
 ?>
 
-<?php $pageTitle = "Area Riservata - Alessio Cattaneo"; include('header.php'); ?>
+<?php $pageTitle = "Area Riservata - Alessio Cattaneo";
+include('header.php'); ?>
 
 <body>
   <div class="wrapper">
@@ -87,25 +117,84 @@ if (isset($_POST['new_username']) && $utente['ruolo'] === 'admin') {
 
         <!-- Saluto utente e mostra i suoi dati -->
         <h1>👋 Ciao <?= htmlspecialchars($utente['nome']) ?> (<?= $utente['username'] ?>)</h1>
-        <p>Ruolo: <strong><?= htmlspecialchars($utente['ruolo']) ?></strong> | Email: <?= htmlspecialchars($utente['email']) ?></p>
+        <p>Ruolo: <strong><?= htmlspecialchars($utente['ruolo']) ?></strong> | Email:
+          <?= htmlspecialchars($utente['email']) ?>
+        </p>
         <a href="logout.php" class="logout-btn">Logout</a>
 
         <hr>
 
         <!-- Sezione Progetti -->
         <h2>📂 Progetti</h2>
-        <?php if ($progetti): foreach ($progetti as $progetto): ?>
-          <div class="card">
-            <h3><?= htmlspecialchars($progetto['titolo']) ?></h3>
-            <p><?= nl2br(htmlspecialchars($progetto['descrizione'])) ?></p>
-            <?php if ($utente['ruolo'] === 'admin'): ?>
-              <!-- Tasto elimina progetto (solo per admin) -->
-              <form method="post" style="display:inline;">
-                <button type="submit" name="delete_project" value="<?= $progetto['id'] ?>" title="Elimina progetto">–</button>
-              </form>
-            <?php endif; ?>
-          </div>
-        <?php endforeach; else: ?>
+        <?php if ($progetti):
+          foreach ($progetti as $progetto): ?>
+            <div class="card">
+              <h3><?= htmlspecialchars($progetto['titolo']) ?></h3>
+              <p><?= nl2br(htmlspecialchars($progetto['descrizione'])) ?></p>
+
+              <?php if ($utente['ruolo'] === 'admin'): ?>
+                <form method="post" style="display:inline;">
+                  <button type="submit" name="delete_project" value="<?= $progetto['id'] ?>"
+                    title="Elimina progetto">–</button>
+                </form>
+
+                <button type="button" onclick="document.getElementById('edit-<?= $progetto['id'] ?>').style.display='block'"
+                  title="Modifica progetto">✎</button>
+
+                <form method="post" enctype="multipart/form-data" style="display:none; margin-top: 1rem;"
+                  id="edit-<?= $progetto['id'] ?>">
+                  <input type="hidden" name="edit_id" value="<?= $progetto['id'] ?>">
+
+                  <div class="form-group">
+                    <label>titolo</label>
+                    <input type="text" name="edit_titolo" value="<?= htmlspecialchars($progetto['titolo']) ?>"
+                      placeholder="Titolo" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label>descrizione</label>
+                    <textarea name="edit_descrizione" placeholder="Descrizione lunga"
+                      required><?= htmlspecialchars($progetto['descrizione']) ?></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>descrizione_lista</label>
+                    <textarea name="edit_descrizione_lista"
+                      placeholder="Descrizione breve"><?= htmlspecialchars($progetto['descrizione_lista'] ?? '') ?></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>data_realizzazione</label>
+                    <input type="date" name="edit_data_realizzazione"
+                      value="<?= htmlspecialchars($progetto['data_realizzazione'] ?? '') ?>">
+                  </div>
+
+                  <div class="form-group">
+                    <label>nome_cliente</label>
+                    <input type="text" name="edit_nome_cliente"
+                      value="<?= htmlspecialchars($progetto['nome_cliente'] ?? '') ?>">
+                  </div>
+
+                  <div class="form-group">
+                    <label>tecnologie</label>
+                    <textarea name="edit_tecnologie"
+                      placeholder="HTML, CSS, JavaScript, PHP..."><?= htmlspecialchars($progetto['tecnologie'] ?? '') ?></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>immagine</label>
+                    <input type="file" name="edit_immagine" accept="image/*">
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="submit" name="modifica_progetto">Salva</button>
+                    <button type="button" class="annulla" onclick="this.closest('form').style.display='none'">Annulla</button>
+                  </div>
+                </form>
+
+              <?php endif; ?>
+            </div>
+          <?php endforeach; else: ?>
           <p>Nessun progetto presente.</p>
         <?php endif; ?>
 
@@ -113,20 +202,23 @@ if (isset($_POST['new_username']) && $utente['ruolo'] === 'admin') {
 
         <!-- Sezione Messaggi dal form contatti -->
         <h2>📩 Messaggi contatto</h2>
-        <?php if ($contatti): foreach ($contatti as $msg): ?>
-          <div class="card">
-            <p><strong><?= htmlspecialchars($msg['nome']) ?> <?= htmlspecialchars($msg['cognome']) ?></strong> - <?= htmlspecialchars($msg['email']) ?></p>
-            <p><em>Oggetto:</em> <?= htmlspecialchars($msg['oggetto']) ?></p>
-            <p><?= nl2br(htmlspecialchars($msg['messaggio'])) ?></p>
-            <small>Inviato il: <?= $msg['data_invio'] ?></small>
-            <?php if ($utente['ruolo'] === 'admin'): ?>
-              <!-- Tasto elimina messaggio (solo admin) -->
-              <form method="post" style="display:inline;">
-                <button type="submit" name="delete_contact" value="<?= $msg['id'] ?>" title="Elimina messaggio">–</button>
-              </form>
-            <?php endif; ?>
-          </div>
-        <?php endforeach; else: ?>
+        <?php if ($contatti):
+          foreach ($contatti as $msg): ?>
+            <div class="card">
+              <p><strong><?= htmlspecialchars($msg['nome']) ?>     <?= htmlspecialchars($msg['cognome']) ?></strong> -
+                <?= htmlspecialchars($msg['email']) ?>
+              </p>
+              <p><em>Oggetto:</em> <?= htmlspecialchars($msg['oggetto']) ?></p>
+              <p><?= nl2br(htmlspecialchars($msg['messaggio'])) ?></p>
+              <small>Inviato il: <?= $msg['data_invio'] ?></small>
+              <?php if ($utente['ruolo'] === 'admin'): ?>
+                <!-- Tasto elimina messaggio (solo admin) -->
+                <form method="post" style="display:inline;">
+                  <button type="submit" name="delete_contact" value="<?= $msg['id'] ?>" title="Elimina messaggio">–</button>
+                </form>
+              <?php endif; ?>
+            </div>
+          <?php endforeach; else: ?>
           <p>Nessun messaggio ricevuto.</p>
         <?php endif; ?>
 
@@ -135,8 +227,10 @@ if (isset($_POST['new_username']) && $utente['ruolo'] === 'admin') {
           <!-- Form per creare un nuovo utente -->
           <h2>👤 Aggiungi nuovo utente</h2>
 
-          <?php if ($successoInserimento): ?><p style="color: #0f0;"><?= $successoInserimento ?></p><?php endif; ?>
-          <?php if ($erroreInserimento): ?><p style="color: red;"><?= $erroreInserimento ?></p><?php endif; ?>
+          <?php if ($successoInserimento): ?>
+            <p style="color: #0f0;"><?= $successoInserimento ?></p><?php endif; ?>
+          <?php if ($erroreInserimento): ?>
+            <p style="color: red;"><?= $erroreInserimento ?></p><?php endif; ?>
 
           <form method="post">
             <div class="form-group"><input type="text" name="new_username" placeholder="Username" required></div>
@@ -159,7 +253,7 @@ if (isset($_POST['new_username']) && $utente['ruolo'] === 'admin') {
           <?php foreach ($utenti as $u): ?>
             <div class="card">
               <strong><?= $u['username'] ?></strong> (<?= $u['ruolo'] ?>) - <?= $u['email'] ?>
-              <br><?= $u['nome'] ?> <?= $u['cognome'] ?>
+              <br><?= $u['nome'] ?>     <?= $u['cognome'] ?>
               <?php if ($u['ruolo'] !== 'admin'): ?>
                 <!-- Tasto elimina utente (non admin) -->
                 <form method="post" style="display:inline;">
